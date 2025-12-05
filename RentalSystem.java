@@ -132,7 +132,7 @@ private RentalSystem() {
                     } else if (recordType.equals("RETURN")) {
                         vehicle.setStatus(Vehicle.VehicleStatus.Available);
                     }
-                    RentalRecord record = new RentalRecord(vehicle, customer, date, amount, "RENT");
+                    RentalRecord record = new RentalRecord(vehicle, customer, recordDate, totalAmount, "RENT");
                     rentalHistory.addRecord(record); // fixing
                     saveRecord(record);
                 }
