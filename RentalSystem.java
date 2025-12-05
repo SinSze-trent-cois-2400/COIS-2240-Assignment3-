@@ -218,7 +218,7 @@ private RentalSystem() {
         }
         customers.add(customer);
         saveCustomer(customer); // Task1-2：change save way
-        System.out.println("Customer added successfully! Customer ID:" + customer.getCustomerId() + "，姓名：" + customer.getCustomerName());
+        System.out.println("Customer added successfully! Customer ID:" + customer.getCustomerId() + "name" + customer.getCustomerName());
         return true;
     }
    
