@@ -180,8 +180,7 @@ private RentalSystem() {
             System.err.println("save rental records fail ：" + e.getMessage());
         }
     }
-
-
+//task 1-4(Enhanced Duplicate Validation + Return Type Adjustment)
 //Task1-2 change the old to , add the save and double check
     //change addVehicle and use saveVehicle
     public boolean addVehicle(Vehicle vehicle) {
@@ -190,8 +189,15 @@ private RentalSystem() {
             System.out.println("fail: liceense plate " + vehicle.getLicensePlate() + "existed！");
             return false;
         }
+        //format Validation
+        if (vehicle.getLicensePlate() == null || vehicle.getLicensePlate().trim().isEmpty()) {
+            System.out.println("Format error: License plate number cannot be empty！");
+            return false;
+        }
+
         vehicles.add(vehicle);
         saveVehicle(vehicle); // Task1-2：change saving way
+        System.out.println("Vehicle added successfully! License plate number:" + vehicle.getLicensePlate());
         return true;
     }
 
@@ -202,8 +208,14 @@ private RentalSystem() {
             System.out.println("Fail：CustomerID" + customer.getCustomerId() + "existed！");
             return false;
         }
+        //format Validation
+        if (customer.getCustomerId() <= 0) {
+            System.out.println(" Format error: Customer ID must be a positive integer！");
+            return false;
+        }
         customers.add(customer);
         saveCustomer(customer); // Task1-2：change save way
+        System.out.println("Customer added successfully! Customer ID:" + customer.getCustomerId() + "，姓名：" + customer.getCustomerName());
         return true;
     }
    
