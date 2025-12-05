@@ -31,23 +31,10 @@ public abstract class Vehicle {
         return trimmedInput.substring(0, 1).toUpperCase() + trimmedInput.substring(1).toLowerCase();
     }
     //keep getter/setter
-
-    public Vehicle() {
-        this(null, null, 0);
-    }
-
-    public void setLicensePlate(String plate) {
-        this.licensePlate = plate == null ? null : plate.toUpperCase();
-    }
-
-    public void setStatus(VehicleStatus status) {
-    	this.status = status;
-    }
-
     public String getLicensePlate() { return licensePlate; }
 
-    public void setLicensePlate(String licensePlate) { //same
-        this.licensePlate = licensePlate;
+    public void setLicensePlate(String licensePlate) {
+        this.licensePlate = licensePlate == null ? null : licensePlate.toUpperCase();
     }
 
     public String getMake() { return make; }
@@ -64,15 +51,11 @@ public abstract class Vehicle {
 
     public int getYear() { return year; }
 
-    public void setYear(int year) {
-        this.year = year;
-    }
+    public void setYear(int year) {this.year = year;}
 
     public VehicleStatus getStatus() { return status; }
 
-    public void setStatus(VehicleStatus status) {//same
-        this.status = status;
-    }
+    public void setStatus(VehicleStatus status) {this.status = status;}
 
     public abstract double calculateRentalCost(int days);
 }
