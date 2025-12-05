@@ -3,10 +3,25 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class RentalSystem {
+    //T1-1
+    rivate static RentalSystem instance;
+    //keep
     private List<Vehicle> vehicles = new ArrayList<>();
     private List<Customer> customers = new ArrayList<>();
     private RentalHistory rentalHistory = new RentalHistory();
 
+//t1-1 can't new
+private RentalSystem() {
+        
+    }
+// t11 public get the only one
+    public static RentalSystem getInstance() {
+        if (instance == null) {
+            instance = new RentalSystem();
+        }
+        return instance;
+    }
+//keep
     public void addVehicle(Vehicle vehicle) {
         vehicles.add(vehicle);
     }
