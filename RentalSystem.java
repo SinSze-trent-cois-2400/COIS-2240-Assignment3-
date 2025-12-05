@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+//add the things for 1-3
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.File;
 
 public class RentalSystem {
     //T1-1
@@ -25,6 +29,117 @@ private RentalSystem() {
         }
         return instance;
     }
+
+    //Task1-3：ass loadData
+    //add vehicle, customer and rentalrecord
+    private void loadData() {
+        loadVehicles();
+        loadCustomers();
+        loadRentalRecords();
+        System.out.println("data loading completed！");
+    }
+
+    // loading vehicle data in vehicles.txt
+    private void loadVehicles() {
+        File file = new File("vehicles.txt");
+        if (!file.exists()) return; //skip if the file does not exist
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split("\\|");
+                if (parts.length != 5) continue; // skip if the format is worng
+
+                String licensePlate = parts[0];
+                String make = parts[1];
+                String model = parts[2];
+                int year = Integer.parseInt(parts[3]);
+                String vehicleType = parts[4];
+
+     //create the correspoonding instance by vehicle type
+      Vehicle vehicle = null;
+                switch (vehicleType) {
+                    case "Car":
+                        vehicle = new Car(make, model, year, 4); // Default 4 seats
+                        break;
+                    case "Minibus":
+                        vehicle = new Minibus(make, model, year, false); // Default no accessibility
+                        break;
+                    case "PickupTruck":
+                        vehicle = new PickupTruck(make, model, year, 1.5, false); // Default 1.5m, no trailer
+                        break;
+                    case "SportCar":
+                        vehicle = new SportCar(make, model, year, 2, 300, true); // Default 2 seats
+                        break;
+                    default:
+                        System.err.println("unknown vehicle type：" + vehicleType);
+                        continue;
+                }
+                vehicle.setLicensePlate(licensePlate);
+                vehicle.setStatus(Vehicle.VehicleStatus.Available); // Available by default after loading
+                vehicles.add(vehicle);
+            }
+        } catch (IOException | NumberFormatException e) {
+            System.err.println("Failed to load vehicle data：" + e.getMessage());
+        }
+    }
+
+    // Load customer data from customers.txt
+    private void loadCustomers() {
+        File file = new File("customers.txt");
+        if (!file.exists()) return; // skip if the item does not exis
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split("\\|");
+                if (parts.length != 2) continue; // skip if format error 
+
+                int customerId = Integer.parseInt(parts[0]);
+                String customerName = parts[1];
+                customers.add(new Customer(customerId, customerName));
+            }
+        } catch (IOException | NumberFormatException e) {
+            System.err.println("Failed to load customer data：" + e.getMessage());
+        }
+    }
+
+    // Load rental record data from rental_records.txt
+    private void loadRentalRecords() {
+        File file = new File("rental_records.txt");
+        if (!file.exists()) return; // skip if the file does not exist
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split("\\|");
+                if (parts.length != 5) continue; // skip if format error 
+
+                String recordType = parts[0];
+                String licensePlate = parts[1];
+                int customerId = Integer.parseInt(parts[2]);
+                LocalDate recordDate = LocalDate.parse(parts[3]);
+                double totalAmount = Double.parseDouble(parts[4]);
+
+                // locate the corresponding vehicle and customer 
+                Vehicle vehicle = findVehicleByPlate(licensePlate);
+                Customer customer = findCustomerById(customerId);
+                if (vehicle != null && customer != null) {
+                    // update vehicle status during recording.
+                    if (recordType.equals("RENT")) {
+                        vehicle.setStatus(Vehicle.VehicleStatus.Rented);
+                    } else if (recordType.equals("RETURN")) {
+                        vehicle.setStatus(Vehicle.VehicleStatus.Available);
+                    }
+                    rentalHistory.addRecord(new RentalRecord(vehicle, customer, recordDate, totalAmount, recordType));
+                }
+            }
+        } catch (IOException | NumberFormatException e) {
+            System.err.println("Failed, load rental records：" + e.getMessage());
+        }
+    }
+
+
 
     // task1-2( add 3 file saving)
     // save vehicles to vehicles.txt
