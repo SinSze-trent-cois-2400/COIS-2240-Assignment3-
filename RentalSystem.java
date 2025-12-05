@@ -12,7 +12,7 @@ import java.io.File;
 
 public class RentalSystem {
     //T1-1
-    rivate static RentalSystem instance;
+    private static RentalSystem instance;//add missing "P"
     //keep
     private List<Vehicle> vehicles = new ArrayList<>();
     private List<Customer> customers = new ArrayList<>();
@@ -20,6 +20,7 @@ public class RentalSystem {
 
 //t1-1 can't new
 private RentalSystem() {
+     loadData();//add missing automatically load file data upon startup
         
     }
 // t1-1 public get the only one
@@ -131,7 +132,9 @@ private RentalSystem() {
                     } else if (recordType.equals("RETURN")) {
                         vehicle.setStatus(Vehicle.VehicleStatus.Available);
                     }
-                    rentalHistory.addRecord(new RentalRecord(vehicle, customer, recordDate, totalAmount, recordType));
+                    RentalRecord record = new RentalRecord(vehicle, customer, date, amount, "RENT");
+                    rentalHistory.addRecord(record); // fixing
+                    saveRecord(record);
                 }
             }
         } catch (IOException | NumberFormatException e) {
