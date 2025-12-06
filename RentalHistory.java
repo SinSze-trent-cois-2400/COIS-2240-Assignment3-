@@ -1,34 +1,21 @@
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 public class RentalHistory {
-    private List<RentalRecord> rentalRecords = new ArrayList<>();
+    private List<RentalRecord> rentalRecords; 
 
+    // Create empty history (starts with no records)
+    public RentalHistory() {
+        this.rentalRecords = new ArrayList<>();
+    }
+
+    // Add a new record to history
     public void addRecord(RentalRecord record) {
         rentalRecords.add(record);
     }
 
+    // Get all records (so other classes can show them)
     public List<RentalRecord> getRentalHistory() {
-        return rentalRecords;
-    }
-
-    public List<RentalRecord> getRentalRecordsByCustomer(String customerName) {
-        List<RentalRecord> result = new ArrayList<>();
-        for (RentalRecord record : rentalRecords) {
-            if (record.getCustomer().toString().toLowerCase().contains(customerName.toLowerCase())) {
-                result.add(record);
-            }
-        }
-        return result;
-    }
-
-    public List<RentalRecord> getRentalRecordsByVehicle(String licensePlate) {
-        List<RentalRecord> result = new ArrayList<>();
-        for (RentalRecord record : rentalRecords) {
-            if (record.getVehicle().getLicensePlate().equalsIgnoreCase(licensePlate)) {
-                result.add(record);
-            }
-        }
-        return result;
+        return new ArrayList<>(rentalRecords); // Return a copy (no one can change the original)
     }
 }
