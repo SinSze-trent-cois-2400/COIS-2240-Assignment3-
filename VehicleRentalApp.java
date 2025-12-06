@@ -40,16 +40,19 @@ public class VehicleRentalApp {
                     scanner.nextLine();
 
                     Vehicle vehicle = null;
+
+
                     // Make the right type of vehicle
-                    if (type == 1) {
-                        System.out.print("Enter number of seats: ");
-                        int seats = scanner.nextInt();
-                        vehicle = new Car(make, model, year, plate, seats);
-                    } else if (type == 2) {
-                        System.out.print("Is accessible for disabilities? (true/false): ");
-                        boolean isAccessible = scanner.nextBoolean();
-                        vehicle = new Minibus(make, model, year, plate, isAccessible);
-                    } else if (type == 3) {
+                    try {
+                if (type == 1) {
+                    System.out.print("Enter number of seats: ");
+                    int seats = scanner.nextInt();
+                    vehicle = new Car(make, model, year, plate, seats);
+                } else if (type == 2) {
+                    System.out.print("Is accessible for disabilities? (true/false): ");
+                    boolean isAccessible = scanner.nextBoolean();
+                    vehicle = new Minibus(make, model, year, plate, isAccessible);
+                } else if (type == 3) {
                         System.out.print("Enter cargo size (in meters): ");
                         double cargoSize = scanner.nextDouble();
                         scanner.nextLine();
@@ -63,6 +66,10 @@ public class VehicleRentalApp {
                     if (vehicle != null) {
                         rentalSystem.addVehicle(vehicle);
                     }
+                    catch (IllegalArgumentException e) {
+                // Catch invalid plate error and show user-friendly message
+                System.out.println("Error adding vehicle: " + e.getMessage());
+            }
                     break;
 
                 // Add a new customer
