@@ -31,6 +31,35 @@ public class RentalSystem {
         return instance;
     }
 
+        //Updated method - Return boolean (true = success, false = failure)
+    public boolean rentVehicle(Vehicle vehicle, Customer customer, LocalDate date, double amount) {
+           if (vehicle.getStatus() == Vehicle.VehicleStatus.AVAILABLE) {
+            vehicle.setStatus(Vehicle.VehicleStatus.RENTED);
+            RentalRecord record = new RentalRecord(vehicle, customer, date, amount, "RENT");
+            rentalHistory.addRecord(record);
+            saveRecord(record);
+            System.out.println("Vehicle rented to " + customer.getCustomerName());
+            return true; // Success - return true
+            } else {
+            System.out.println("Vehicle is not available to rent.");
+            return false; // Failure - return false
+            }
+    }
+
+//Updated method - Return boolean (true = success, false = failure)
+    public boolean returnVehicle(Vehicle vehicle, Customer customer, LocalDate date, double extraFees) {
+        if (vehicle.getStatus() == Vehicle.VehicleStatus.RENTED) {
+            vehicle.setStatus(Vehicle.VehicleStatus.AVAILABLE);
+            RentalRecord record = new RentalRecord(vehicle, customer, date, extraFees, "RETURN");
+            rentalHistory.addRecord(record);
+            saveRecord(record);
+            System.out.println("Vehicle returned by " + customer.getCustomerName());
+            return true; // Success - return true
+        } else {
+            System.out.println("This vehicle is not rented.");
+            return false; // Failure - return false
+        }
+    }
     // Load all saved data 
     private void loadData() {
         loadVehicles();
