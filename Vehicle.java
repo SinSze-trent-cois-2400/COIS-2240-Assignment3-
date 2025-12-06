@@ -1,6 +1,6 @@
 
 public abstract class Vehicle {
-    // Vehicle status: either available (can rent) or rented (already taken)
+    // Vehicle status available (can rent) or rented (already taken)
     public enum VehicleStatus {
         AVAILABLE, RENTED
     }
@@ -16,25 +16,36 @@ public abstract class Vehicle {
         this.make = capitalize(make);   // Make first letter uppercase 
         this.model = capitalize(model); // Same for model 
         this.year = year;
-        this.licensePlate = licensePlate.toUpperCase(); // Plate in uppercase 
+        // Use setLicensePlate to apply validation
+        tsetLicensePlate(licensePlate);
         this.status = VehicleStatus.AVAILABLE; // New vehicles are available to rent
     }
 
-    // Make first letter of a word uppercase (simple helper)
-    protected String capitalize(String str) {
-        if (str == null || str.isEmpty()) return str;
-        return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
+    // Validate plate format (3 letters + 3 number)
+    protected boolean isValidPlate(String plate) {
+        if (plate == null || plate.trim().isEmpty()) return false;
+        return plate.matches("[A-Z]{3}[0-9]{3}"); // Regex for valid format
     }
 
+    //Set plate with validation (throw error if invalid)
+    private boolean isValidPlate(String plate) {
+        if (plate == null || plate.trim().isEmpty()) return false;
+        return plate.matches("[A-Z]{3}[0-9]{3}"); // Regex for valid format
+    }
+
+    // et plate with validation (throw error if invalid)
+   public void setLicensePlate(String licensePlate) {
+        String upperPlate = licensePlate.toUpperCase().trim();
+        if (!isValidPlate(upperPlate)) {
+            // 2.1: Throw exception for invalid plate (caught in VehicleRentalApp)
+            throw new IllegalArgumentException("Invalid license plate! Must be 3 letters + 3 numbers (e.g., AAA111)");
+        }
+        this.licensePlate = upperPlate;
+    }
+
+    // Abstract methods (unchanged)
     public abstract double calculateRentalCost(int days);
-
     public abstract String getInfo();
-
-    // Show basic vehicle info (brand, model, year, plate)
-    public String getBasicInfo() {
-        return String.format("%s %s (%d) | Plate: %s", 
-            make, model, year, licensePlate);
-    }
 
     // Getters (allow other classes to read these values)
     public String getLicensePlate() { return licensePlate; }
